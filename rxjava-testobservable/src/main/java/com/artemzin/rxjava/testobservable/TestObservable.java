@@ -26,10 +26,10 @@ public class TestObservable<T> extends Observable<T> {
    * this Operator will emit {@link AssertionError}.
    *
    * @param expectedError expected error that should be emitted by source {@link Observable}.
-   *                      Operator will compare then via {@link Throwable#equals(Object)} call.
+   *                      Operator will compare them via {@link Throwable#equals(Object)} call.
    * @return {@link TestObservable}.
    */
-  public TestObservable<T> assertError(final Throwable expectedError) {
+  public TestObservable<T> expectError(final Throwable expectedError) {
     return new TestObservable<T>(new OnSubscribe<T>() {
       @Override public void call(final Subscriber<? super T> subscriber) {
         TestObservable.this.subscribe(new Subscriber<T>() {

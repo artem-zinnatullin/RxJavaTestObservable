@@ -13,12 +13,12 @@ import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 public class TestObservableTest {
 
   @Test
-  public void assertError_byErrorObject_shouldThrowExceptionWhenObservableEmitsUnexpectedException() {
+  public void expectError_byErrorObject_shouldThrowExceptionWhenObservableEmitsUnexpectedException() {
     Throwable error = new RuntimeException();
 
     TestObservable<Object> testObservable = TestObservable
       .from(Observable.error(error))
-      .assertError(new IllegalStateException()); // Expected exception != actual.
+      .expectError(new IllegalStateException()); // Expected exception != actual.
 
     try {
       testObservable.subscribe();
@@ -31,10 +31,10 @@ public class TestObservableTest {
   }
 
   @Test
-  public void assertError_byErrorObject_shouldThrowExceptionWhenObservableNotEmitsException() {
+  public void expectError_byErrorObject_shouldThrowExceptionWhenObservableNotEmitsException() {
     TestObservable<String> testObservable = TestObservable
       .from(Observable.just("test"))
-      .assertError(new IllegalStateException());
+      .expectError(new IllegalStateException());
 
     try {
       testObservable.subscribe();
@@ -46,19 +46,19 @@ public class TestObservableTest {
   }
 
   @Test
-  public void assertError_byErrorObject_shouldPassWhenObservableEmitsExpectedException() {
+  public void expectError_byErrorObject_shouldPassWhenObservableEmitsExpectedException() {
     Throwable error = new RuntimeException();
 
     TestObservable<Object> testObservable = TestObservable
       .from(Observable.error(error))
-      .assertError(error);
+      .expectError(error);
 
     // We don't except any exceptions here.
     testObservable.subscribe();
   }
 
   @Test
-  public void assertError_byErrorObject_shouldPassEmissionUntilExpectedErrorOcurres() {
+  public void expectError_byErrorObject_shouldPassEmissionUntilExpectedErrorOcurres() {
     final Throwable error = new RuntimeException();
 
     TestObservable<String> testObservable = TestObservable
@@ -70,7 +70,7 @@ public class TestObservableTest {
           subscriber.onError(error);
         }
       }))
-      .assertError(error);
+      .expectError(error);
 
     TestSubscriber<String> testSubscriber = new TestSubscriber<String>();
     testObservable.subscribe(testSubscriber);
@@ -81,7 +81,7 @@ public class TestObservableTest {
   }
 
   @Test
-  public void assertError_byErrorObject_shouldPassEmissionUntilUnexpectedErrorOcurres() {
+  public void expectError_byErrorObject_shouldPassEmissionUntilUnexpectedErrorOcurres() {
     final Throwable error = new RuntimeException();
 
     TestObservable<String> testObservable = TestObservable
@@ -93,7 +93,7 @@ public class TestObservableTest {
           subscriber.onError(error);
         }
       }))
-      .assertError(new IllegalStateException()); // Expected exception != actual.
+      .expectError(new IllegalStateException()); // Expected exception != actual.
 
     TestSubscriber<String> testSubscriber = new TestSubscriber<String>();
     testObservable.subscribe(testSubscriber);
@@ -107,7 +107,7 @@ public class TestObservableTest {
   }
 
   @Test
-  public void assertError_byErrorObject_shouldPassEmissionUntilSequenceCompletes() {
+  public void expectError_byErrorObject_shouldPassEmissionUntilSequenceCompletes() {
     TestObservable<Integer> testObservable = TestObservable
       .from(Observable.create(new Observable.OnSubscribe<Integer>() {
         @Override public void call(Subscriber<? super Integer> subscriber) {
@@ -117,7 +117,7 @@ public class TestObservableTest {
           subscriber.onCompleted();
         }
       }))
-      .assertError(new RuntimeException());
+      .expectError(new RuntimeException());
 
     TestSubscriber<Integer> testSubscriber = new TestSubscriber<Integer>();
     testObservable.subscribe(testSubscriber);
