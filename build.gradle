@@ -1,15 +1,19 @@
 buildscript {
-    repositories {
-        jcenter()
-    }
+  repositories {
+    jcenter()
+  }
 }
 
 allprojects {
-    repositories {
-        jcenter()
-    }
+  repositories {
+    jcenter()
+  }
 }
 
 ext.libraries = [
-        junit: 'junit:junit:4.12'
+  rxJava : 'io.reactivex:rxjava:1.1.0',
+
+  // Test dependencies.
+  junit  : 'junit:junit:4.12',
+  assertJ: 'org.assertj:assertj-core:1.7.1',
 ]
