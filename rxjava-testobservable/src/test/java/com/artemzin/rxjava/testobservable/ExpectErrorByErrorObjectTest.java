@@ -10,10 +10,10 @@ import rx.observers.TestSubscriber;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 
-public class TestObservableTest {
+public class ExpectErrorByErrorObjectTest {
 
   @Test
-  public void expectError_byErrorObject_shouldThrowExceptionWhenObservableEmitsUnexpectedException() {
+  public void expectError_shouldThrowExceptionWhenObservableEmitsUnexpectedException() {
     Throwable error = new RuntimeException();
 
     TestObservable<Object> testObservable = TestObservable
@@ -25,13 +25,13 @@ public class TestObservableTest {
       failBecauseExceptionWasNotThrown(OnErrorNotImplementedException.class);
     } catch (OnErrorNotImplementedException expected) {
       AssertionError cause = (AssertionError) expected.getCause();
-      assertThat(cause).hasMessage("Expected exception is not equals to actual one. Expected = java.lang.IllegalStateException, actual = java.lang.RuntimeException");
+      assertThat(cause).hasMessage("Expected exception is not equal to actual one. Expected = java.lang.IllegalStateException, actual = java.lang.RuntimeException");
       assertThat(cause.getCause()).isSameAs(error);
     }
   }
 
   @Test
-  public void expectError_byErrorObject_shouldThrowExceptionWhenObservableNotEmitsException() {
+  public void expectError_shouldThrowExceptionWhenObservableNotEmitsException() {
     TestObservable<String> testObservable = TestObservable
       .from(Observable.just("test"))
       .expectError(new IllegalStateException());
@@ -46,7 +46,7 @@ public class TestObservableTest {
   }
 
   @Test
-  public void expectError_byErrorObject_shouldPassWhenObservableEmitsExpectedException() {
+  public void expectError_shouldPassWhenObservableEmitsExpectedException() {
     Throwable error = new RuntimeException();
 
     TestObservable<Object> testObservable = TestObservable
@@ -58,7 +58,7 @@ public class TestObservableTest {
   }
 
   @Test
-  public void expectError_byErrorObject_shouldPassEmissionUntilExpectedErrorOcurres() {
+  public void expectError_shouldPassEmissionUntilExpectedErrorOcurres() {
     final Throwable error = new RuntimeException();
 
     TestObservable<String> testObservable = TestObservable
@@ -81,7 +81,7 @@ public class TestObservableTest {
   }
 
   @Test
-  public void expectError_byErrorObject_shouldPassEmissionUntilUnexpectedErrorOcurres() {
+  public void expectError_shouldPassEmissionUntilUnexpectedErrorOcurres() {
     final Throwable error = new RuntimeException();
 
     TestObservable<String> testObservable = TestObservable
@@ -100,14 +100,14 @@ public class TestObservableTest {
 
     testSubscriber.assertValues("1", "2", "3");
     AssertionError assertionError = (AssertionError) testSubscriber.getOnErrorEvents().get(0);
-    assertThat(assertionError).hasMessage("Expected exception is not equals to actual one. Expected = java.lang.IllegalStateException, actual = java.lang.RuntimeException");
+    assertThat(assertionError).hasMessage("Expected exception is not equal to actual one. Expected = java.lang.IllegalStateException, actual = java.lang.RuntimeException");
     assertThat(assertionError.getCause()).isSameAs(error);
 
     testSubscriber.assertNotCompleted();
   }
 
   @Test
-  public void expectError_byErrorObject_shouldPassEmissionUntilSequenceCompletes() {
+  public void expectError_shouldPassEmissionUntilSequenceCompletes() {
     TestObservable<Integer> testObservable = TestObservable
       .from(Observable.create(new Observable.OnSubscribe<Integer>() {
         @Override public void call(Subscriber<? super Integer> subscriber) {
